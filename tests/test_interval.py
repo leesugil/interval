@@ -1,5 +1,5 @@
-from .interval import union, contains, excluding, overlapping, excludingco, complements, remove_overlapping_intervals
-from . import test_interval_data as cases
+from intervalop.interval import union, contains, excluding, overlapping, excludingco, complements, remove_overlapping_intervals
+import test_interval_data as cases
 
 def test_union():
     for x, y, z in cases.union:
