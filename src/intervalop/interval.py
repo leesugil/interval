@@ -5,7 +5,7 @@ complement
 difference
 """
 
-def contains(A, x):
+def contains(A: list[list[float]], x: float):
     """
     A = [[a, b], [c, d]]
     """
@@ -24,6 +24,7 @@ def is_intersecting(A, B):
     output = False
     master = [A, B]
     master.sort(key=lambda sublist: sublist[0])
+    # wek inequality like closed intervals
     if master[1][0] <= master[0][1]:
         output = True
     return output
@@ -36,6 +37,7 @@ def is_intersectingco(A, B):
     output = False
     master = [A, B]
     master.sort(key=lambda sublist: sublist[0])
+    # strict inequality like open intervals
     if master[1][0] < master[0][1]:
         output = True
     return output
@@ -117,6 +119,15 @@ def excluding(A, B):
     """
     A = [[a, b], [c, d]]
     B = [[e, f], [g, h]]
+
+    if [a, b] intersects with [e, f] as closed intervals and no other intesections,
+    output: [[c, d]]
+
+    A: ....[a......b].....[c....d]..........
+    B: ........[e.....f]...........[g..h]...
+
+    output: [[c, d]]
+       ...................[c....d]..........
     """
     output = []
     for I in A:
@@ -132,6 +143,12 @@ def excludingco(A, B):
     """
     A = [[a, b], [c, d]]
     B = [[e, f], [g, h]]
+
+    A: ....(a......b).....(c....d)..........
+    B: ........(e.....f).........(g..h).....
+
+    output: [[c, d]]
+       ...................(c....d)..........
     """
     output = []
     for I in A:
@@ -140,6 +157,87 @@ def excludingco(A, B):
             if is_intersectingco(I, J):
                 remove = True
         if not remove:
+            output.append(I)
+    return output
+
+def set_difference(I, A):
+    """
+    I = [a, b]
+    A = [[c, d], [e, f], ...]
+
+    A: ....[a........................b]...
+    B: ........[c.....d]....[e...f].......
+
+    output: [[a, c], [d, e], [f, d]]
+       ....[a...c]...[d......e].[f...b]...
+
+    A: ............[a................b]...
+    B: ........[c.....d]....[e...f].......
+
+    output: [[d, e], [f, d]]
+       ..............[d......e].[f...b]...
+
+    A: ......[a......b]...................
+    B: ....[c............d]...............
+    output: []
+
+    A: ......[a.........b]...........
+    B: ....[c.......d]...............
+    output: [[d, b]]
+
+    A: ......[a...............b].....
+    B: ..........[c......d]..........
+    output: [[a, c], [d, b]]
+
+    A: ......[a..........b]..........
+    B: ..........[c...........d].....
+    output: [[a, c]]
+    """
+    output = []
+    remaining = I
+    for J in A:
+        if J[0] <= remaining[0]:
+            if remaining[1] <= J[1]:
+                # output == [] must
+                return output
+            else:
+                # J[1] < remaining[1]
+                output.append([J[1], remaining[1]])
+        else:
+            # remaining[0] < J[0]
+            output.append([remaining[0], J[0]])
+            if J[1] < remaining[1]:
+                output.append([J[1], remaining[1]])
+    return output
+
+def set_differences(A, B):
+    """
+    A = [[a, b], [c, d]]
+    B = [[e, f], [g, h]]
+
+    A: ....[a......b].....[c....d]..........
+    B: ........[e.....f]...........[g..h]...
+
+    output: [[a, e], [c, d]]
+       ....[a...e]........[c....d]..........
+
+    A: ....[a.......................d]...
+    B: ........[e.....f]....[g..h].......
+
+    output: [[a, e], [f, g], [h, d]]
+       ....[a...e]...[f......g][h...d]...
+    """
+    output = []
+    for I in A:
+        intersections = []
+        for J in B:
+            if is_intersecting(I, J):
+                intersections.append(J)
+        if intersections:
+            appends = set_difference(I, intersections)
+            for a in appends:
+                output.append(a)
+        else:
             output.append(I)
     return output
 
