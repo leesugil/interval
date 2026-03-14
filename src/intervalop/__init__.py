@@ -6,4 +6,6 @@ from .interval import (
     excludingco,
     complements,
     remove_overlapping_intervals,
+    set_difference,
+    set_differences
 )
