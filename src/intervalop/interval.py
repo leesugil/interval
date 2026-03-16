@@ -195,10 +195,14 @@ def set_difference(I, A):
     """
     output = []
     remaining = I
+    print(f"SET_DIFFERENCE input: {I}, {A}")
+
+    """
     for J in A:
         if J[0] <= remaining[0]:
             if remaining[1] <= J[1]:
                 # output == [] must
+                print(f"output: {output}")
                 return output
             else:
                 # J[1] < remaining[1]
@@ -208,6 +212,51 @@ def set_difference(I, A):
             output.append([remaining[0], J[0]])
             if J[1] < remaining[1]:
                 output.append([J[1], remaining[1]])
+    print(f"output: {output}")
+    return output
+    """
+
+    def set_difference_1on1(I, J):
+        output = []
+        remaining = I
+        print(f"SET_DIFFERENCE_1ON1 input: {I}, {J}")
+        if J[0] <= remaining[0]:
+            if remaining[1] <= J[1]:
+                # output == [] must
+                print(f"SET_DIFFERENCE_1ON1 output: {output} (case 1)")
+                return output
+            else:
+                # J[1] < remaining[1]
+                if J[1] <= remaining[0]:
+                    print(f"SET_DIFFERENCE_1ON1 output: {output} (case 2)")
+                    return output
+                else:
+                    output.append([J[1], remaining[1]])
+        else:
+            # remaining[0] < J[0]
+            if remaining[1] <= J[0]:
+                print(f"SET_DIFFERENCE_1ON1 output: {output} (case 1)")
+                return output
+            else:
+                output.append([remaining[0], J[0]])
+                if J[1] < remaining[1]:
+                    output.append([J[1], remaining[1]])
+        print(f"SET_DIFFERENCE_1ON1 output: {output} (case 3)")
+        return output
+
+    for J in A:
+        divided = set_difference_1on1(remaining, J)
+        print(f"SET_DIFFERENCE remaining: {remaining}, J: {J}, divided: {divided}")
+        if divided != []:
+            if divided[0] == divided[-1]:
+                #output = output + divided
+                remaining = divided[0]
+            else:
+                output.append(divided[0])
+                remaining = divided[-1]
+    #if (output != []) and (output[-1] != remaining):
+    output.append(remaining)
+    print(f"SET_DIFFERENCE output: {output}")
     return output
 
 def set_differences(A, B):

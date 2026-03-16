@@ -1,4 +1,6 @@
-from intervalop.interval import union, contains, excluding, overlapping, excludingco, complements, remove_overlapping_intervals
+from intervalop.interval import (
+        union, contains, excluding, overlapping, excludingco,
+        complements, remove_overlapping_intervals, set_difference, set_differences)
 import test_interval_data as cases
 
 def test_union():
@@ -28,3 +30,11 @@ def test_complements():
 def test_remove_overlapping_intervals():
     for x, y in cases.remove_overlapping_intervals:
         assert remove_overlapping_intervals(x) == y
+
+def test_set_difference():
+    for x, y, z in cases.set_difference:
+        assert set_difference(x, y) == z
+
+def test_set_differences():
+    for x, y, z in cases.set_differences:
+        assert set_differences(x, y) == z
