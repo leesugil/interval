@@ -160,7 +160,7 @@ def excludingco(A, B):
             output.append(I)
     return output
 
-def set_difference(I, A):
+def set_difference(I, A, debug=False):
     """
     I = [a, b]
     A = [[c, d], [e, f], ...]
@@ -195,7 +195,8 @@ def set_difference(I, A):
     """
     output = []
     remaining = I
-    print(f"SET_DIFFERENCE input: {I}, {A}")
+    if debug:
+        print(f"SET_DIFFERENCE input: {I}, {A}")
 
     """
     for J in A:
@@ -216,20 +217,23 @@ def set_difference(I, A):
     return output
     """
 
-    def set_difference_1on1(I, J):
+    def set_difference_1on1(I, J, debug=False):
         output = []
         remaining = I
-        print(f"SET_DIFFERENCE_1ON1 input: {I}, {J}")
+        if debug:
+            print(f"SET_DIFFERENCE_1ON1 input: {I}, {J}")
         if J[0] <= remaining[0]:
             if remaining[1] <= J[1]:
                 # output == [] must
-                print(f"SET_DIFFERENCE_1ON1 output: {output} (case 1)")
+                if debug:
+                    print(f"SET_DIFFERENCE_1ON1 output: {output} (case 1)")
                 return output
             else:
                 # J[1] < remaining[1]
                 if J[1] <= remaining[0]:
                     output.append(remaining)
-                    print(f"SET_DIFFERENCE_1ON1 output: {output} (case 2)")
+                    if debug:
+                        print(f"SET_DIFFERENCE_1ON1 output: {output} (case 2)")
                     return output
                 else:
                     output.append([J[1], remaining[1]])
@@ -237,18 +241,21 @@ def set_difference(I, A):
             # remaining[0] < J[0]
             if remaining[1] <= J[0]:
                 output.append(remaining)
-                print(f"SET_DIFFERENCE_1ON1 output: {output} (case 3)")
+                if debug:
+                    print(f"SET_DIFFERENCE_1ON1 output: {output} (case 3)")
                 return output
             else:
                 output.append([remaining[0], J[0]])
                 if J[1] < remaining[1]:
                     output.append([J[1], remaining[1]])
-        print(f"SET_DIFFERENCE_1ON1 output: {output} (case 4)")
+        if debug:
+            print(f"SET_DIFFERENCE_1ON1 output: {output} (case 4)")
         return output
 
     for J in A:
         divided = set_difference_1on1(remaining, J)
-        print(f"SET_DIFFERENCE remaining: {remaining}, J: {J}, divided: {divided}")
+        if debug:
+            print(f"SET_DIFFERENCE remaining: {remaining}, J: {J}, divided: {divided}")
         if divided == []:
             remaining = []
             break
@@ -262,10 +269,11 @@ def set_difference(I, A):
     #if (output != []) and (output[-1] != remaining):
     if remaining != []:
         output.append(remaining)
-    print(f"SET_DIFFERENCE output: {output}")
+    if debug:
+        print(f"SET_DIFFERENCE output: {output}")
     return output
 
-def set_differences(A, B):
+def set_differences(A, B, debug=False):
     """
     A = [[a, b], [c, d]]
     B = [[e, f], [g, h]]
@@ -283,7 +291,8 @@ def set_differences(A, B):
        ....[a...e]...[f......g][h...d]...
     """
     output = []
-    print(f"SET_DIFFERENCES input A: {A}, input B: {B}")
+    if debug:
+        print(f"SET_DIFFERENCES input A: {A}, input B: {B}")
     for I in A:
         intersections = []
         for J in B:
@@ -295,7 +304,8 @@ def set_differences(A, B):
                 output.append(a)
         else:
             output.append(I)
-    print(f"SET_DIFFERENCES output: {output}")
+    if debug:
+        print(f"SET_DIFFERENCES output: {output}")
     return output
 
 def remove_overlapping_intervals(A):
